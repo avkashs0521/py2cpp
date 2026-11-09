@@ -25,6 +25,36 @@ export interface TranspileOptions {
    * @default 4
    */
   indent?: number;
+
+  /**
+   * Whether to return an object with code and compilation statistics.
+   * @default false
+   */
+  includeStats?: boolean;
+
+  /**
+   * Additional standard C++ headers to include (e.g. ['<chrono>', '<memory>']).
+   * @default []
+   */
+  extraHeaders?: string[];
+}
+
+/**
+ * Compilation statistics summary.
+ */
+export interface TranspileStats {
+  linesTranspiled: number;
+  functionsCount: number;
+  headers: string[];
+  hasMain: boolean;
+}
+
+/**
+ * Result returned when includeStats is true.
+ */
+export interface TranspileResult {
+  code: string;
+  stats: TranspileStats;
 }
 
 /**
@@ -84,7 +114,27 @@ export function translateExpression(
  * @param options Transpiler configuration options.
  * @returns Generated C++ source code.
  */
-export function transpile(source: string, options?: TranspileOptions): string;
+export function transpile(
+  source: string,
+  options: TranspileOptions & { includeStats: true }
+): TranspileResult;
+export function transpile(
+  source: string,
+  options?: TranspileOptions & { includeStats?: false }
+): string;
+export function transpile(source: string, options?: TranspileOptions): string | TranspileResult;
+
+/**
+ * Transpiles Python source code and returns both the generated C++ code and compilation statistics.
+ *
+ * @param source Python source code.
+ * @param options Transpiler configuration options.
+ * @returns Object with generated code and compilation statistics.
+ */
+export function transpileWithStats(
+  source: string,
+  options?: TranspileOptions
+): TranspileResult;
 
 /**
  * Shorthand alias for `transpile()`.

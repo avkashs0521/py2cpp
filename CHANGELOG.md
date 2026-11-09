@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2026-11-10
+
+### Added
+- `transpileWithStats` function and `includeStats` option returning compilation metrics (`linesTranspiled`, `functionsCount`, `headers`, `hasMain`).
+- `extraHeaders` option allowing manual injection of custom C++ standard libraries (e.g. `<chrono>`, `<memory>`).
+- Updated TypeScript declarations with overloaded return types for `includeStats: true`.
+- Unit tests verifying compilation statistics and custom header injection.
+
 ## [1.0.0] - 2026-11-10
 
 ### Added
@@ -19,4 +27,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Built-in math functions, list methods (`append`, `pop`, `clear`), and logical operators.
 - CLI executable (`py2cpp` and `npx @avkashhhh/py2cpp`).
 - Zero runtime dependencies with modern ES modules and TypeScript definitions.
-

@@ -108,10 +108,13 @@ Transpiles a Python source string into C++.
 | `includeHeaders` | `boolean` | `true` | Automatically includes required standard C++ headers (`<iostream>`, `<vector>`, etc.). |
 | `useNamespaceStd` | `boolean` | `false` | Adds `using namespace std;` and strips `std::` prefixes. |
 | `indent` | `number` | `4` | Number of spaces per indentation level. |
+| `includeStats` | `boolean` | `false` | When true, returns `{ code, stats }` with compilation metrics. |
+| `extraHeaders` | `string[]` | `[]` | Additional standard headers to include (e.g. `['<chrono>']`). |
 
 #### Helper Methods
 
 - **`py2cpp(source, options?)`**: Alias to `transpile`.
+- **`transpileWithStats(source, options?)`**: Shorthand returning `{ code, stats }` with compilation metrics.
 - **`transpileSnippet(source, options?)`**: Shorthand for `{ wrapInMain: false, includeHeaders: false }`.
 - **`inferType(expr, scope?)`**: Infers the C++ type string for a given Python expression.
 - **`mapType(pyType)`**: Maps Python type annotation (`int`, `str`, `List[int]`, etc.) to C++ type.

@@ -2,6 +2,7 @@ import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
 import {
   transpile,
+  transpileWithStats,
   py2cpp,
   transpileSnippet,
   mapType,
@@ -23,6 +24,9 @@ describe('@avkashhhh/py2cpp', () => {
       assert.throws(() => transpile('', { includeHeaders: 1 }), /includeHeaders must be a boolean/);
       assert.throws(() => transpile('', { useNamespaceStd: null }), /useNamespaceStd must be a boolean/);
       assert.throws(() => transpile('', { indent: -2 }), /indent must be a non-negative integer/);
+      assert.throws(() => transpile('', { includeStats: 'yes' }), /includeStats must be a boolean/);
+      assert.throws(() => transpile('', { extraHeaders: 'not-array' }), /extraHeaders must be an array of strings/);
+      assert.throws(() => transpile('', { extraHeaders: [123] }), /extraHeaders must be an array of strings/);
     });
   });
 
@@ -286,6 +290,33 @@ if True:
     it('functions identically to transpile', () => {
       const py = `x = 5`;
       assert.equal(py2cpp(py), transpile(py));
+    });
+  });
+
+  describe('transpileWithStats & extraHeaders (v1.1.0)', () => {
+    it('returns code and detailed compilation statistics', () => {
+      const py = `
+def double_val(x: int) -> int:
+    return x * 2
+
+nums = [1, 2, 3]
+print("Result:", double_val(nums[0]))
+`;
+      const result = transpileWithStats(py);
+      assert.ok(result.code.includes('int double_val(int x)'));
+      assert.equal(typeof result.stats, 'object');
+      assert.equal(result.stats.functionsCount, 1);
+      assert.ok(result.stats.headers.includes('<iostream>'));
+      assert.ok(result.stats.headers.includes('<vector>'));
+      assert.equal(result.stats.hasMain, true);
+      assert.ok(result.stats.linesTranspiled > 0);
+    });
+
+    it('injects extraHeaders into generated output', () => {
+      const py = `x = 42`;
+      const cpp = transpile(py, { extraHeaders: ['<chrono>', 'memory'] });
+      assert.ok(cpp.includes('#include <chrono>'));
+      assert.ok(cpp.includes('#include <memory>'));
     });
   });
 });

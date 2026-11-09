@@ -29,6 +29,8 @@ export class TranspileError extends Error {
  * @property {boolean} [includeHeaders=true] - Whether to automatically detect and prepend required C++ header files.
  * @property {boolean} [useNamespaceStd=false] - Whether to include 'using namespace std;' and strip 'std::'.
  * @property {number} [indent=4] - Number of spaces per indentation level.
+ * @property {boolean} [includeStats=false] - Whether to return an object with code and compilation statistics.
+ * @property {string[]} [extraHeaders=[]] - Additional C++ headers to include.
  */
 
 /**
@@ -363,6 +365,8 @@ export function transpile(source, options = {}) {
     includeHeaders = true,
     useNamespaceStd = false,
     indent = 4,
+    includeStats = false,
+    extraHeaders = [],
   } = options || {};
 
   if (typeof wrapInMain !== 'boolean') {
@@ -377,9 +381,20 @@ export function transpile(source, options = {}) {
   if (typeof indent !== 'number' || indent < 0 || !Number.isInteger(indent)) {
     throw new TypeError('indent must be a non-negative integer');
   }
+  if (typeof includeStats !== 'boolean') {
+    throw new TypeError('includeStats must be a boolean');
+  }
+  if (!Array.isArray(extraHeaders) || extraHeaders.some((h) => typeof h !== 'string')) {
+    throw new TypeError('extraHeaders must be an array of strings');
+  }
 
   const pad = ' '.repeat(indent);
   const headers = new Set();
+  for (const h of extraHeaders) {
+    const trimmed = h.trim();
+    const formatted = trimmed.startsWith('<') && trimmed.endsWith('>') ? trimmed : `<${trimmed}>`;
+    headers.add(formatted);
+  }
   const globalScope = new Map();
 
   const lines = source.split(/\r?\n/);
@@ -753,7 +768,32 @@ export function transpile(source, options = {}) {
     finalCode = finalCode.replace(/\bstd::/g, '');
   }
 
+  const stats = {
+    linesTranspiled: lines.length,
+    functionsCount: functionDefs.length,
+    headers: Array.from(headers).sort(),
+    hasMain: wrapInMain && activeTopLevel.length > 0,
+  };
+
+  if (includeStats) {
+    return {
+      code: finalCode,
+      stats,
+    };
+  }
+
   return finalCode;
+}
+
+/**
+ * Transpiles Python source code and returns both the generated C++ code and compilation statistics.
+ *
+ * @param {string} source - Python source code.
+ * @param {TranspileOptions} [options={}] - Transpiler configuration options.
+ * @returns {{ code: string, stats: { linesTranspiled: number, functionsCount: number, headers: string[], hasMain: boolean } }}
+ */
+export function transpileWithStats(source, options = {}) {
+  return transpile(source, { ...options, includeStats: true });
 }
 
 /**
