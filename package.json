@@ -1,0 +1,57 @@
+{
+  "name": "@avkashhhh/py2cpp",
+  "version": "1.0.0",
+  "description": "A tiny, zero-dependency Python to modern C++ transpiler and code generator for Node.js and the browser.",
+  "keywords": [
+    "python",
+    "cpp",
+    "cplusplus",
+    "transpiler",
+    "compiler",
+    "code-generator",
+    "converter",
+    "ast",
+    "zero-dependency",
+    "esm"
+  ],
+  "author": "Avkash Singh",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/avkashs0521/py2cpp.git"
+  },
+  "bugs": {
+    "url": "https://github.com/avkashs0521/py2cpp/issues"
+  },
+  "homepage": "https://github.com/avkashs0521/py2cpp#readme",
+  "type": "module",
+  "main": "./index.js",
+  "types": "./index.d.ts",
+  "bin": {
+    "py2cpp": "./bin/py2cpp.js"
+  },
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    }
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "files": [
+    "index.js",
+    "index.d.ts",
+    "bin",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "test": "node --test"
+  }
+}
