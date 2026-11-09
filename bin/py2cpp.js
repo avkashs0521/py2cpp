@@ -107,3 +107,4 @@ if (inputFile) {
   printHelp();
   process.exit(1);
 }
+

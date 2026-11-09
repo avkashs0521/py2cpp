@@ -18,7 +18,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/avkashs0521/py2cpp.git"
+    "url": "git+https://github.com/avkashs0521/py2cpp.git"
   },
   "bugs": {
     "url": "https://github.com/avkashs0521/py2cpp/issues"
@@ -28,7 +28,7 @@
   "main": "./index.js",
   "types": "./index.d.ts",
   "bin": {
-    "py2cpp": "./bin/py2cpp.js"
+    "py2cpp": "bin/py2cpp.js"
   },
   "exports": {
     ".": {

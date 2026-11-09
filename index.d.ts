@@ -105,3 +105,4 @@ export function py2cpp(source: string, options?: TranspileOptions): string;
 export function transpileSnippet(source: string, options?: TranspileOptions): string;
 
 export default transpile;
+
